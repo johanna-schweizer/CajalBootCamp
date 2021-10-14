@@ -74,7 +74,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
                         
-                        rects = det.detectMultiScale(scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
+                        rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
                         for (x, y, w, h) in rects:
                           frame_face = cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 20)
                         

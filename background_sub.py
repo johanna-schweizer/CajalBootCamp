@@ -45,7 +45,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
     
     def do_GET(self):
         self.frame_i = 0
-        self.prev_frame = []
+        self.bg = np.zeros((480,640),dtype = np.uint8)
         if self.path == '/':
             
             self.send_response(301)
@@ -75,7 +75,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         curr_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.cv2.COLOR_BGR2GRAY)
                         self.prev_frame.append(np.int32(curr_frame))
+                        self.bg = np.concatenate((curr_frame, self.bg))
+                        
                         prev_frame = np.mean(self.prev_frame[self.frame_i-10:])
+                        
+                        
                         
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array

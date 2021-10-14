@@ -70,14 +70,14 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
-                        cv2.imwrite('img_'+str(self.frame_i) + '.jpg', frame)  
-                        self.frame_i = self.frame_i + 1
+                        
                         #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
-                        
+                        cv2.imwrite('img_'+str(self.frame_i) + '.jpg', frame)  
+                        self.frame_i = self.frame_i + 1
                         rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
                         
                         for (x, y, w, h) in rects:

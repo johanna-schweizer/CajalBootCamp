@@ -66,6 +66,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
+                fgbg = cv2.createBackgroundSubtractorGMG()
+                kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,(3,3))
                 while True:
                     with output.condition:
                         output.condition.wait()
@@ -76,20 +78,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
                         
-                        if self.frame_i == 0:
-                            frame_background = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
-                                             cv2.IMREAD_COLOR)
-                        else:
-                        
-                        
-                        
-                            ###############
-                            ## HERE CAN GO ALL IMAGE PROCESSING
-                            ###############
-                            difference = cv2.absdiff(frame, frame_background)
-
-                            # Apply thresholding to eliminate noise
-                            frame = cv2.threshold(difference, 25, 255, cv2.THRESH_BINARY)[1]
+                        fgmask = fgbg.apply(frame)
+                        frame = cv2.morphologyEx(fgmask, cv2.MORPH_OPEN, kernel)
                         
                         
                         

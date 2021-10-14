@@ -39,7 +39,7 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
-frame_i = 0
+
 class StreamingHandler(server.BaseHTTPRequestHandler):
     
     
@@ -63,6 +63,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
+                frame_i = 0
                 while True:
                     with output.condition:
                         output.condition.wait()

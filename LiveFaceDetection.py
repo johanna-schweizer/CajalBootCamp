@@ -39,9 +39,8 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
-
 class StreamingHandler(server.BaseHTTPRequestHandler):
-    
+    frame_i = 0
     
     def do_GET(self):
         if self.path == '/':
@@ -62,18 +61,26 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Pragma', 'no-cache')
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
+            det = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
+            
             try:
-                frame_i = 0
+                frame_i
                 while True:
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
-                        
+                        #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
                         
+                        rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
+                        for (x, y, w, h) in rects:
+                          cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
+                        
+                        cv2.imwrite('img_'+str(frame_i)+'.jpg', frame)
+                        frame_i +=
                         
                         ###############
                         ## HERE CAN GO ALL IMAGE PROCESSING
@@ -83,9 +90,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         
                         ### and now we convert it back to JPEG to stream it
                         _, frame = cv2.imencode('.JPEG', frame) 
-                        
-                        cv2.imwrite('/home/pi/CajalBootCamp/my_img' + str(frame_i) + '.jpg', frame)
-                        frame_i +=1
                         
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
@@ -100,7 +104,6 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
-            
 
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True

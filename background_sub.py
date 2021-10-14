@@ -76,20 +76,26 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
                         
-                        if self.frame_i ==0:
-                            self.bg = np.asarray(frame)
+                        if self.frame_i == 0:
+                            frame_background = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
+                                             cv2.IMREAD_COLOR)
+                        else:
                         
                         
                         
-                        ###############
-                        ## HERE CAN GO ALL IMAGE PROCESSING
-                        ###############
+                            ###############
+                            ## HERE CAN GO ALL IMAGE PROCESSING
+                            ###############
+                            difference = cv2.absdiff(frame, frame_background)
+
+                            # Apply thresholding to eliminate noise
+                            frame = cv2.threshold(difference, 25, 255, cv2.THRESH_BINARY)[1]
                         
                         
                         
                         ### and now we convert it back to JPEG to stream it
                         _, frame = cv2.imencode('.JPEG', frame) 
-                        frame = np.asarray(frame)-self.bg
+                        
                         
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')

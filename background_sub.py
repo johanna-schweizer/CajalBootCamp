@@ -66,13 +66,15 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
             try:
-                prev_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
-                                             cv2.IMREAD_COLOR)
+                
                 
                 while True:
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
+                        if self.frame_i == 0:
+                            prev_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
+                                             cv2.IMREAD_COLOR)
                         
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array

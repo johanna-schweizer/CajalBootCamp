@@ -74,7 +74,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = output.frame
                         curr_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.cv2.COLOR_BGR2GRAY)
-                        self.prev_frame.append(np.int32(curr_frame))
+                        #self.prev_frame.append(np.int32(curr_frame))
                         self.bg = np.concatenate((curr_frame, self.bg))
                         
                         prev_frame = np.mean(self.bg[self.frame_i-10:])

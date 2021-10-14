@@ -39,8 +39,9 @@ class StreamingOutput(object):
             self.buffer.seek(0)
         return self.buffer.write(buf)
 
+frame_i = 0
 class StreamingHandler(server.BaseHTTPRequestHandler):
-    frame_i = 0
+    
     
     def do_GET(self):
         if self.path == '/':
@@ -83,7 +84,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         _, frame = cv2.imencode('.JPEG', frame) 
                         
                         cv2.imwrite('my_img' + str(frame_i) + '.jpg', frame)
-                        frame_i = frame_i+1
+                        frame_i +=1
                         
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')

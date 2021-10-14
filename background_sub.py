@@ -72,7 +72,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
-                        if self.frame_1 == 0:
+                        if self.frame_i == 0:
                             prev_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.cv2.COLOR_BGR2GRAY)
                         #self.prev_frame.append(np.int32(curr_frame))

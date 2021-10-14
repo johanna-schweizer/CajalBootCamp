@@ -80,7 +80,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                             crop_image = frame[y:y+h, x:x+w]
                           #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
                           
-                            cv2.imwrite('img_'+str(self.frame_i), crop_image)
+                            cv2.imwrite('img_'+str(self.frame_i) + '.jpg', crop_image)
                         
                         
                         ###############

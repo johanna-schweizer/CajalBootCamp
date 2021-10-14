@@ -82,8 +82,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         ### and now we convert it back to JPEG to stream it
                         _, frame = cv2.imencode('.JPEG', frame) 
                         
-                        for i in range(101):
-                            cv2.imwrite('my_img' + str(i) + '.jpg', frame)
+                        cv2.imwrite('my_img' + str(frame_i) + '.jpg', frame)
+                        frame_i = frame_i+1
                         
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
@@ -98,6 +98,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
         else:
             self.send_error(404)
             self.end_headers()
+            
 
 class StreamingServer(socketserver.ThreadingMixIn, server.HTTPServer):
     allow_reuse_address = True

@@ -41,7 +41,7 @@ class StreamingOutput(object):
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
     
-    
+    frame_i = 0
     def do_GET(self):
         if self.path == '/':
             self.send_response(301)
@@ -64,7 +64,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             det = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
             
             try:
-                frame_i = 0
+                
                 while True:
                     with output.condition:
                         output.condition.wait()
@@ -77,10 +77,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         
                         rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
                         for (x, y, w, h) in rects:
-                          cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
+                            crop_image = frame[y:y+h, x:x+w]
+                          #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
+                          
+                            cv2.imwrite('img_'+str(self.frame_i), crop_image)
                         
-                        cv2.imwrite('/home/pi/CajalBootCamp/img_'+str(frame_i), frame)
-                        frame_i += 1
                         
                         ###############
                         ## HERE CAN GO ALL IMAGE PROCESSING

@@ -41,8 +41,9 @@ class StreamingOutput(object):
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
     
-    frame_i = 0
+    
     def do_GET(self):
+        self.frame_i = 0
         if self.path == '/':
             self.send_response(301)
             self.send_header('Location', '/index.html')
@@ -81,7 +82,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                           #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
                           
                             cv2.imwrite('img_'+str(self.frame_i) + '.jpg', crop_image)
-                        self.frame_i +=1
+                        self.frame_i = self.frame_i + 1
                         
                         
                         ###############

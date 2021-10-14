@@ -74,14 +74,14 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = output.frame
                         if self.frame_i == 0:
                             prev_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
-                                             cv2.IMREAD_COLOR)
+                                             cv2.cv2.COLOR_BGR2GRAY)
                         
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
                         
-                        frame = cv2.absdiff(prev_frame, frame)
+                        frame = prev_frame - frame
                         
                         
                         

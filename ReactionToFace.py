@@ -12,7 +12,7 @@ from http import server
 import numpy as np
 import cv2
 
-board = pyfirmata.Arduino('/dev/ttyUSB1')
+board = pyfirmata.Arduino('/dev/ttyUSB0')
 
 PAGE="""\
 <html>

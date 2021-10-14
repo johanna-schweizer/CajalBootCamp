@@ -79,7 +79,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         for (x, y, w, h) in rects:
                           cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
                         
-                        cv2.imwrite('img_'+str(frame_i)+'.jpg', frame)
+                        cv2.imwrite('/home/pi/CajalBootCamp/img_'+str(frame_i), frame)
                         frame_i += 1
                         
                         ###############

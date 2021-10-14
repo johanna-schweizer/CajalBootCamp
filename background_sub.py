@@ -45,7 +45,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
     
     def do_GET(self):
         self.frame_i = 0
-        self.bg = np.zeros((5,480,640), dtype = np.unit8)
+        self.bg = np.zeros((5,480,640), dtype = np.uint8)
         if self.path == '/':
             
             self.send_response(301)

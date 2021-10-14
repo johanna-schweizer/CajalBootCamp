@@ -40,7 +40,7 @@ class StreamingOutput(object):
         return self.buffer.write(buf)
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
-    frame_i = 0
+    
     
     def do_GET(self):
         if self.path == '/':
@@ -64,7 +64,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             det = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
             
             try:
-                frame_i
+                frame_i = 0
                 while True:
                     with output.condition:
                         output.condition.wait()

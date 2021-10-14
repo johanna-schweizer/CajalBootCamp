@@ -72,11 +72,10 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
-                        if self.frame_i < 10:
-                            curr_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
+                        curr_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.cv2.COLOR_BGR2GRAY)
-                            self.prev_frame.append(np.int32(curr_frame))
-                        prev_frame = np.mean(self.prev_frame)
+                        self.prev_frame.append(np.int32(curr_frame))
+                        prev_frame = np.mean(self.prev_frame[self.frame_i-10:])
                         
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array

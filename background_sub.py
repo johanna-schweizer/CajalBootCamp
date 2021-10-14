@@ -82,6 +82,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                              cv2.IMREAD_COLOR)
                         
                         frame = np.int32(prev_frame) - np.int32(frame)
+                        self.frame_i = self.frame_i+1
                         
                         
                         

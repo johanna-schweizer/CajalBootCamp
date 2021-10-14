@@ -87,7 +87,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.COLOR_BGR2GRAY)
                         
-                        frame = np.int32(prev_frame) - np.int32(frame)
+                        frame =cv2.subtract(img1,img2)
                         self.frame_i = self.frame_i+1
                         
                         

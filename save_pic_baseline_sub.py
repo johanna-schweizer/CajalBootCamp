@@ -70,6 +70,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
+                        cv2.imwrite('img_'+str(self.frame_i) + '.jpg', frame)  
+                        self.frame_i = self.frame_i + 1
                         #gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array
@@ -77,7 +79,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                              cv2.IMREAD_COLOR)
                         
                         rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
-                        self.frame_i = self.frame_i + 1
+                        
                         for (x, y, w, h) in rects:
                             crop_image = frame[y:y+h, x:x+w]
                             
@@ -95,7 +97,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         
                         ### and now we convert it back to JPEG to stream it
                         _, frame = cv2.imencode('.JPEG', frame) 
-                    cv2.imwrite('img_'+str(self.frame_i) + '.jpg', frame)   
+                     
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')
                     self.send_header('Content-Length', len(frame))

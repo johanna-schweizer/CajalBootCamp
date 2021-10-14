@@ -84,7 +84,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         ### and now we convert it back to JPEG to stream it
                         _, frame = cv2.imencode('.JPEG', frame) 
                         
-                        cv2.imwrite('my_img' + str(frame_i) + '.jpg', frame)
+                        cv2.imwrite('/my_img' + str(frame_i) + '.jpg', frame)
                         frame_i +=1
                         
                     self.wfile.write(b'--FRAME\r\n')

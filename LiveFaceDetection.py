@@ -77,12 +77,13 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                              cv2.IMREAD_COLOR)
                         
                         rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
+                        self.frame_i = self.frame_i + 1
                         for (x, y, w, h) in rects:
                             crop_image = frame[y:y+h, x:x+w]
                           #cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
                           
                             cv2.imwrite('img_'+str(self.frame_i) + '.jpg', crop_image)
-                        self.frame_i = self.frame_i + 1
+                        
                         
                         
                         ###############

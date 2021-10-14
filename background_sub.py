@@ -24,6 +24,7 @@ PAGE="""\
 
 class StreamingOutput(object):
     def __init__(self):
+        
         self.frame = None
         self.buffer = io.BytesIO()
         self.condition = Condition()
@@ -40,10 +41,13 @@ class StreamingOutput(object):
         return self.buffer.write(buf)
 
 class StreamingHandler(server.BaseHTTPRequestHandler):
-    frame_i = 0
+    self.frame_i = 0
+    self.bg = np.zeros((5,480,640), dtype = np.unit8)
     
     def do_GET(self):
+        
         if self.path == '/':
+            
             self.send_response(301)
             self.send_header('Location', '/index.html')
             self.end_headers()
@@ -71,8 +75,11 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
-                        fgbg = cv2.createBackgroundSubtractorMOG2()
-                        fgbg.apply(frame)
+                        
+                        if self.frame_i ==0:
+                            self.bg = np.asarray(frame)
+                        
+                        all_images = np.asarray(frame)-self.bg
                         
                         ###############
                         ## HERE CAN GO ALL IMAGE PROCESSING
@@ -81,7 +88,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         
                         
                         ### and now we convert it back to JPEG to stream it
-                        _, frame = cv2.imencode('.JPEG', frame) 
+                        _, frame = cv2.imencode('.JPEG', all_images) 
                         
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')

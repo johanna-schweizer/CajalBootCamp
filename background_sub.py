@@ -79,7 +79,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         if self.frame_i ==0:
                             self.bg = np.asarray(frame)
                         
-                        all_images = np.asarray(frame)-self.bg
+                        
                         
                         ###############
                         ## HERE CAN GO ALL IMAGE PROCESSING
@@ -88,7 +88,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         
                         
                         ### and now we convert it back to JPEG to stream it
-                        _, frame = cv2.imencode('.JPEG', all_images) 
+                        _, frame = cv2.imencode('.JPEG', frame) 
+                        frame = np.asarray(frame)-self.bg
                         
                     self.wfile.write(b'--FRAME\r\n')
                     self.send_header('Content-Type', 'image/jpeg')

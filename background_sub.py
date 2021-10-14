@@ -77,7 +77,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         self.prev_frame.append(np.int32(curr_frame))
                         self.bg = np.concatenate((curr_frame, self.bg))
                         
-                        prev_frame = np.mean(self.prev_frame[self.frame_i-10:])
+                        prev_frame = np.mean(self.bg[self.frame_i-10:])
                         
                         
                         

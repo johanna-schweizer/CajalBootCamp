@@ -72,19 +72,20 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                     with output.condition:
                         output.condition.wait()
                         frame = output.frame
-                        curr_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
+                        if self.frame_1 == 0:
+                            prev_frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.cv2.COLOR_BGR2GRAY)
                         #self.prev_frame.append(np.int32(curr_frame))
-                        self.bg = np.concatenate((curr_frame, self.bg))
+                        #self.bg = np.concatenate((curr_frame, self.bg))
                         
-                        prev_frame = np.mean(self.bg[self.frame_i-10:])
+                        #prev_frame = np.mean(self.bg[self.frame_i-10:])
                         
                         
                         
                         ### The image is encoded in bytes,
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
-                                             cv2.IMREAD_COLOR)
+                                             cv2.COLOR_BGR2GRAY)
                         
                         frame = np.int32(prev_frame) - np.int32(frame)
                         self.frame_i = self.frame_i+1

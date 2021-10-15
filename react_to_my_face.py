@@ -92,7 +92,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         # Do the job
                         interpreter.invoke()
                         # Get the pose
-                        pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS)
+                        pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS,1)
 
                         height, width, ch = frame.shape
 

@@ -1,8 +1,8 @@
+
 import io
 import picamera # Camera
 from pycoral.adapters import common
 from pycoral.utils.edgetpu import make_interpreter
-
 
 #### THIS IS IMPORTANT FOR LIFE STREAMING ####
 import logging
@@ -64,15 +64,13 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Pragma', 'no-cache')
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
-                        
-            _NUM_KEYPOINTS = 1
-            
+            det = cv2.CascadeClassifier("haarcascade_frontalface_default.xml")
             # This is where you specify the Deep Neural Network.
             # Please put it in the same folder as the python file.
             # --> this can go at the very beginning after import cv2 in the streaming file
             interpreter = make_interpreter('face_edgetpu.tflite')
             interpreter.allocate_tensors()
-
+            
             try:
                 while True:
                     with output.condition:
@@ -83,36 +81,34 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
-                        #### --> needs to happen for each image ####
-                        # This resizes the RGB image
-                        resized_img = cv2.resize(frame, common.input_size(interpreter))
-                        # Send resized image to Coral
-                        common.set_input(interpreter, resized_img)
-
-                        # Do the job
-                        interpreter.invoke()
-                        if interpreter.invoke() is not None:
-                            cv2.circle(frame, [50, 50], 25, (255, 0, 0), -1) # fill the circle
                         
-#                         # Get the pose
-#                         pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS,1)
+                        rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
+                        
+                        if rects is not None:
+                            #### --> needs to happen for each image ####
+                            # This resizes the RGB image
+                            resized_img = cv2.resize(frame, common.input_size(interpreter))
+                            # Send resized image to Coral
+                            common.set_input(interpreter, resized_img)
 
-#                         height, width, ch = frame.shape
-
-#                         # Draw the pose onto the image using blue dots
-#                         for i in range(0, _NUM_KEYPOINTS):
-#                             cv2.circle(frame,
-#                                        [50, 50],
-#                                        25, # radius
-#                                        (255, 0, 0), # color in RGB
-#                                        -1) # fill the circle
-
-                           ###############
-                           ## HERE CAN GO ALL IMAGE PROCESSING
-                           ###############
-
-
-
+                            # Do the job
+                            interpreter.invoke()
+                            if interpreter.invoke() is not None:
+                                for (x, y, w, h) in rects:
+                                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
+                            
+                            
+                            
+                        for (x, y, w, h) in rects:
+                          cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 20)
+                        
+                        
+                        ###############
+                        ## HERE CAN GO ALL IMAGE PROCESSING
+                        ###############
+                        
+                        
+                        
                         ### and now we convert it back to JPEG to stream it
                         _, frame = cv2.imencode('.JPEG', frame) 
                         

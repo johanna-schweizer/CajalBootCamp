@@ -106,7 +106,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                 print(interpreter.invoke())
                                 if interpreter.invoke() is not None:
                                 
-                                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
+                                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
                             
                             
                             

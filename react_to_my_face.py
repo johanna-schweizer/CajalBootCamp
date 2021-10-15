@@ -65,7 +65,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=FRAME')
             self.end_headers()
                         
-            _NUM_KEYPOINTS = 17
+            _NUM_KEYPOINTS = 1
             
             # This is where you specify the Deep Neural Network.
             # Please put it in the same folder as the python file.

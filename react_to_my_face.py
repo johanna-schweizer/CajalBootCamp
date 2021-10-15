@@ -87,8 +87,9 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         if rects is not None:
                             #### --> needs to happen for each image ####
                             # This resizes the RGB image
-                            for (x, y, w, h) in rects:
-                                crop_image = frame[y:y+h, x:x+w]
+                            
+                            crop_image = [frame[y:y+h, x:x+w] for (x, y, w, h) in rects]
+                                
                             res_img = cv2.resize(crop_image, (128,128), interpolation = cv2.INTER_AREA)
                             resized_img = cv2.resize(res_img, common.input_size(interpreter))
                             # Send resized image to Coral

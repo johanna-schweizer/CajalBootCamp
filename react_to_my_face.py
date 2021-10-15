@@ -91,18 +91,20 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
                         # Do the job
                         interpreter.invoke()
-                        # Get the pose
-                        pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS,1)
+                        print(interpreter.invoke())
+                        
+#                         # Get the pose
+#                         pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS,1)
 
-                        height, width, ch = frame.shape
+#                         height, width, ch = frame.shape
 
-                        # Draw the pose onto the image using blue dots
-                        for i in range(0, _NUM_KEYPOINTS):
-                            cv2.circle(frame,
-                                       [50, 50],
-                                       25, # radius
-                                       (255, 0, 0), # color in RGB
-                                       -1) # fill the circle
+#                         # Draw the pose onto the image using blue dots
+#                         for i in range(0, _NUM_KEYPOINTS):
+#                             cv2.circle(frame,
+#                                        [50, 50],
+#                                        25, # radius
+#                                        (255, 0, 0), # color in RGB
+#                                        -1) # fill the circle
 
                            ###############
                            ## HERE CAN GO ALL IMAGE PROCESSING

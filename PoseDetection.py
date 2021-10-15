@@ -83,32 +83,30 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         ### needs to be converted to e.g. numpy array
                         frame = cv2.imdecode(np.frombuffer(frame, dtype=np.uint8),
                                              cv2.IMREAD_COLOR)
-                        
-                       
-                         #### --> needs to happen for each image ####
-                         # This resizes the RGB image
-                         resized_img = cv2.resize(frame, common.input_size(interpreter))
-                         # Send resized image to Coral
-                         common.set_input(interpreter, resized_img)
+                        #### --> needs to happen for each image ####
+                        # This resizes the RGB image
+                        resized_img = cv2.resize(frame, common.input_size(interpreter))
+                        # Send resized image to Coral
+                        common.set_input(interpreter, resized_img)
 
-                         # Do the job
-                         interpreter.invoke()
-                         # Get the pose
-                         pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS, 3)
+                        # Do the job
+                        interpreter.invoke()
+                        # Get the pose
+                        pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS, 3)
 
-                         height, width, ch = frame.shape
+                        height, width, ch = frame.shape
 
-                         # Draw the pose onto the image using blue dots
-                         for i in range(0, _NUM_KEYPOINTS):
-                             cv2.circle(frame,
-                                        [int(pose[i][1] * width), int(pose[i][0] * height)],
-                                        5, # radius
-                                        (255, 0, 0), # color in RGB
-                                        -1) # fill the circle
+                        # Draw the pose onto the image using blue dots
+                        for i in range(0, _NUM_KEYPOINTS):
+                            cv2.circle(frame,
+                                       [int(pose[i][1] * width), int(pose[i][0] * height)],
+                                       5, # radius
+                                       (255, 0, 0), # color in RGB
+                                       -1) # fill the circle
 
-                            ###############
-                            ## HERE CAN GO ALL IMAGE PROCESSING
-                            ###############
+                           ###############
+                           ## HERE CAN GO ALL IMAGE PROCESSING
+                           ###############
 
 
 

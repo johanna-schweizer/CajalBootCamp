@@ -87,7 +87,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         if rects is not None:
                             #### --> needs to happen for each image ####
                             # This resizes the RGB image
-                            resized_img = cv2.resize(frame, common.input_size(interpreter))
+                            res_img = cv2.resize(frame, (128,128), interpolation = cv2.INTER_AREA)
+                            resized_img = cv2.resize(res_img, common.input_size(interpreter))
                             # Send resized image to Coral
                             common.set_input(interpreter, resized_img)
 

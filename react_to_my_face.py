@@ -99,8 +99,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                         # Draw the pose onto the image using blue dots
                         for i in range(0, _NUM_KEYPOINTS):
                             cv2.circle(frame,
-                                       [int(1 * width), int(1 * height)],
-                                       5, # radius
+                                       [50, 50],
+                                       25, # radius
                                        (255, 0, 0), # color in RGB
                                        -1) # fill the circle
 

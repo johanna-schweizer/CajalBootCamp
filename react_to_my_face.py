@@ -70,6 +70,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
             # --> this can go at the very beginning after import cv2 in the streaming file
             interpreter = make_interpreter('face_edgetpu.tflite')
             interpreter.allocate_tensors()
+            crop_image = []
             
             try:
                 while True:
@@ -88,7 +89,10 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                             #### --> needs to happen for each image ####
                             # This resizes the RGB image
                             
-                            crop_image = [frame[y:y+h, x:x+w] for (x, y, w, h) in rects]
+                            for (x, y, w, h) in rects:
+                                crop_image = frame[y:y+h, x:x+w]
+                            
+                            #crop_image = [frame[y:y+h, x:x+w] for (x, y, w, h) in rects]
                             dim = (128,128)
                                 
                             resized_img = cv2.resize(crop_image, dim)

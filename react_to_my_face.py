@@ -93,7 +93,10 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
                             # Do the job
                             interpreter.invoke()
-                            if interpreter.invoke() is not None:
+                            # Get the pose
+                            pose = common.output_tensor(interpreter, 0)
+                            print(pose)
+                            if pose.invoke() is not None:
                                 
                                 for (x, y, w, h) in rects:
                                     cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)

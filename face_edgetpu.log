@@ -1,0 +1,12 @@
+Edge TPU Compiler version 16.0.384591198
+Input: face.tflite
+Output: face_edgetpu.tflite
+
+Operator                       Count      Status
+
+MAX_POOL_2D                    2          Operation is working on an unsupported data type
+CONV_2D                        6          Operation is working on an unsupported data type
+MEAN                           1          Operation is working on an unsupported data type
+QUANTIZE                       1          Operation is otherwise supported, but not mapped due to some unspecified limitation
+LOGISTIC                       1          Operation is working on an unsupported data type
+FULLY_CONNECTED                2          Operation is working on an unsupported data type

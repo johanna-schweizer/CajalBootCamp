@@ -92,7 +92,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                             common.set_input(interpreter, resized_img)
 
                             # Do the job
-                            interpreter.invoke()
+                            #interpreter.invoke()
                             # Get the pose
                             pose = common.output_tensor(interpreter, 0)
                             print(pose)

@@ -84,32 +84,29 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                              cv2.IMREAD_COLOR)
                         
                         rects = det.detectMultiScale(frame, scaleFactor=1.1, minNeighbors=5, minSize=(200, 200), flags=cv2.CASCADE_SCALE_IMAGE)
-                        for (x, y, w, h) in rects:
-                                crop_image = frame[y:y+h, x:x+w]
+                        
                         
                         if rects is not None:
                             #### --> needs to happen for each image ####
                             # This resizes the RGB image
+                            for (x, y, w, h) in rects:
+                                crop_image = frame[y:y+h, x:x+w]
                             
-                            
-                            
-                            
-                            dim = (128,128)
-                                
-                            resized_img = cv2.resize(crop_image, dim)
-                            #resized_img = cv2.resize(crop_image, common.input_size(interpreter))
-                            # Send resized image to Coral
-                            common.set_input(interpreter, resized_img)
+                                dim = (128,128)
 
-                            # Do the job
-                            interpreter.invoke()
-                            # Get the pose
-                            pose = common.output_tensor(interpreter, 0)
-                            print(interpreter.invoke())
-                            if interpreter.invoke() is not None:
+                                resized_img = cv2.resize(crop_image, dim)
+                                #resized_img = cv2.resize(crop_image, common.input_size(interpreter))
+                                # Send resized image to Coral
+                                common.set_input(interpreter, resized_img)
+
+                                # Do the job
+                                interpreter.invoke()
+                                # Get the pose
+                                pose = common.output_tensor(interpreter, 0)
+                                print(interpreter.invoke())
+                                if interpreter.invoke() is not None:
                                 
-                                for (x, y, w, h) in rects:
-                                    cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
+                                cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 20)
                             
                             
                             

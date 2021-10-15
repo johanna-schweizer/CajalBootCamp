@@ -102,7 +102,7 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                                 # Do the job
                                 interpreter.invoke()
                                 # Get the pose
-                                pose = common.output_tensor(interpreter, 0)
+                                #pose = common.output_tensor(interpreter, 0)
                                 print(interpreter.invoke())
                                 if interpreter.invoke() is not None:
                                 

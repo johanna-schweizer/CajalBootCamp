@@ -91,8 +91,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
                             crop_image = [frame[y:y+h, x:x+w] for (x, y, w, h) in rects]
                             dim = (128,128)
                                 
-                            #res_img = cv2.resize(crop_image, dim, interpolation = cv2.INTER_AREA)
-                            resized_img = cv2.resize(crop_image, common.input_size(interpreter))
+                            resized_img = cv2.resize(crop_image, dim, interpolation = cv2.INTER_AREA)
+                            #resized_img = cv2.resize(crop_image, common.input_size(interpreter))
                             # Send resized image to Coral
                             common.set_input(interpreter, resized_img)
 

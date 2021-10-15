@@ -91,7 +91,8 @@ class StreamingHandler(server.BaseHTTPRequestHandler):
 
                         # Do the job
                         interpreter.invoke()
-                        print(interpreter.invoke())
+                        if interpreter.invoke() is not None:
+                            cv2.circle(frame, [50, 50], 25, (255, 0, 0), -1) # fill the circle
                         
 #                         # Get the pose
 #                         pose = common.output_tensor(interpreter, 0).copy().reshape(_NUM_KEYPOINTS,1)
